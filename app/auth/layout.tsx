@@ -1,0 +1,20 @@
+
+
+const Layout = ( { children }: {children: React.ReactNode}) => {
+    return (
+        <div className="flex min-h-screen bg-emerald-600 py-20">
+            <div className="m-auto bg-slate-50 rounded-md w-3/5 h-3/4 grid lg:grid-cols-2">
+                <div className="text-red-500 flex justify-center items-center">
+                    Images
+                </div>
+                <div className="right flex flex-col justify-evenly">
+                    <div className="text-center py-10">
+                        {children}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Layout;
