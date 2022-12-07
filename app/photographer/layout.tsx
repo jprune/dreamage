@@ -53,7 +53,7 @@ const Layout = ( { children }: {children: React.ReactNode}) => {
                     <div className="fixed md:static w-full">
                         <NavBar />
                     </div>
-                    <div>      
+                    <div className='mx-5'>      
                         {children}
                     </div>
                 </div>
