@@ -13,3 +13,9 @@ export type Image = {
     imageSize: number,
     imageType: string
 }
+
+type RenderImage = {
+    imageUuid: string,
+    imageName: string
+    imageUrl: string
+}

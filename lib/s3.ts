@@ -1,6 +1,6 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import crypto, { randomBytes } from 'crypto';
+import { randomBytes } from 'crypto';
 
 const bucketName = process.env.AWS_BUCKET_NAME as string;
 const region = process.env.AWS_BUCKET_REGION;
@@ -29,3 +29,17 @@ export async function generateUploadUrl() {
     return uploadUrl;
 }
   
+
+export async function generateDownloadUrl(imageName: string) {
+
+    const params = {
+        Bucket: bucketName,
+        Key: imageName,
+    };
+    const command = new GetObjectCommand(params);
+    const seconds = 3600;
+
+    const uploadUrl = await getSignedUrl(s3Client, command, { expiresIn: seconds });
+    console.log(uploadUrl);
+    return uploadUrl;
+}

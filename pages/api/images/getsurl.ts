@@ -3,10 +3,9 @@ import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { generateUploadUrl } from '../../../lib/s3';
 
-export default async function findUser (req: NextApiRequest, res: NextApiResponse) {
+export default async function getsurl (req: NextApiRequest, res: NextApiResponse) {
     const session = await unstable_getServerSession(req, res, authOptions);
     if (session) {
-        console.log('Session during getsurl is', JSON.stringify(session, null, 2));
         
         if(req.method === 'GET') {
             const url = await generateUploadUrl();
@@ -19,5 +18,4 @@ export default async function findUser (req: NextApiRequest, res: NextApiRespons
         // Not Signed in
         res.status(401);
     }
-    res.end();
 }
