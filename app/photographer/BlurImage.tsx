@@ -18,7 +18,7 @@ const BlurImage = ({image}: {image: RenderImage}) => {
                     src={image.imageUrl}
                     fill={true}
                     className={cn(
-                        'duration-700 ease-in-out group-hover:opacity-75',
+                        'duration-700 ease-in-out group-hover:opacity-50',
                         isLoading
                             ? 'scale-110 blur-2xl grayscale'
                             : 'scale-100 blur-0 grayscale-0'
@@ -26,7 +26,7 @@ const BlurImage = ({image}: {image: RenderImage}) => {
                     onLoadingComplete={() => setLoading(false)}
                 />
             </div>
-            <h3 className="mt-4 text-sm text-gray-700">{image.imageName}</h3>
+            <p className="mt-4 text-sm text-gray-700 break-all">{image.imageName}</p>
         </div>
     );
 };

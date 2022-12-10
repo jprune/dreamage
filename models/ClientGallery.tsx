@@ -3,14 +3,17 @@ import { Schema, model, models } from 'mongoose';
 const sectionSchema = new Schema({
     sectionTitle: {
         type: String,
-        required: true
     },
     imageCollection: [String]
 });
 
 const clientGallerySchema = new Schema({
-    title: {
+    clientGalleryTitle: {
         type: String,
+        required: true,
+    },
+    userId: {
+        type: Schema.Types.ObjectId,
         required: true,
     },
     sections: [sectionSchema],

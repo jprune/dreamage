@@ -19,3 +19,15 @@ type RenderImage = {
     imageName: string
     imageUrl: string
 }
+
+type Section = {
+    sectionTitle?: string,
+    images: [string]
+}
+
+export type ClientGallery = {
+    _id?: string,
+    clientGalleryTitle: string,
+    userId: string,
+    sections?: [Section]
+}
