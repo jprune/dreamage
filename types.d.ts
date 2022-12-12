@@ -22,7 +22,7 @@ type RenderImage = {
 
 type Section = {
     sectionTitle?: string,
-    images: [string]
+    imageCollection: [string]
 }
 
 export type ClientGallery = {

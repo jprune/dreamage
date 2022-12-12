@@ -24,6 +24,7 @@ const Page = (props: Props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [imagesArray, setImagesArray] = useState<Array<RenderImage>>();
     const [selectedImagesArr, setSelectedImagesArr] = useState<any>([]);
+    const [clientGalleryImagesSigned, setClientGalleryImagesSigned] = useState<Array<RenderImage>>();
     
     const getGalleryDetails = async () => {
         try {
@@ -60,15 +61,13 @@ const Page = (props: Props) => {
         const newGalleryDetails = { ...galleryDetails};
         //@ts-ignore
         newGalleryDetails.sections = [newSectionObject];
-        console.log(newGalleryDetails);
         setGalleryDetails(newGalleryDetails);
     };
 
     const updateClientGallery = async () => {
         try {
             console.log(galleryDetails);
-            const { data } = await axios.post('/api/galleries/client/updateGalleryDetails', { galleryDetails });
-            console.log('data send back', data);
+            await axios.post('/api/galleries/client/updateGalleryDetails', { galleryDetails });
         } catch (error) {
             console.log('Error updating gallery', error);
         }
@@ -79,18 +78,20 @@ const Page = (props: Props) => {
         getGalleryDetails();
     }, []);
 
-    // const getUserImages = async () => {
-    //     //get all UUIDs for user
-    //     //request signed urls for images
-    //     if(!galleryDetails) return;
-    //     const { data } = await axios.post('/api/images/getDownloadUrlSelected', { imagesArr: galleryDetails?.sections[0].images });
-    //     // update state with array
-    //     // setUserImages(data.userData);
-    // };
+    useEffect(() => {
+        if(galleryDetails?.sections?.length < 1) return;
+        getClientGalleryImagesSigned();
+    }, [galleryDetails]);
 
-    // useEffect(() => {
-    //     getUserImages();
-    // }, [galleryDetails]);
+    const getClientGalleryImagesSigned = async () => {
+        //get all UUIDs for user
+        //request signed urls for images
+        if(!galleryDetails) return;
+        const { data } = await axios.post('/api/galleries/client/getDownloadUrlSelected', { imageCollection: galleryDetails?.sections[0]?.imageCollection });
+        console.log('data from api', data);
+        // update state with array
+        setClientGalleryImagesSigned(data.galleryImages);
+    };
 
     if(!galleryDetails) {
         return (
@@ -123,11 +124,17 @@ const Page = (props: Props) => {
                     </button>
                 </div>
 
-                <div className='mt-10 w-full'>
+                <div className='mt-10 w-full flex flex-col'>
                     <h3 className='h-5 border-b-[2px] border-slate-400 text-2xl text-center'>
                         <span className='bg-white px-5'>All photos</span>
                     </h3>
-                    {}
+                    <div className='mt-10 w-full md:w-[70%] grid grid-cols-1 gap-y-5 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8'>
+                        { clientGalleryImagesSigned ? clientGalleryImagesSigned.map((image) => (
+                        
+                            <BlurImage image={image} key={image.imageUrl}/>
+                        ))
+                            : null}
+                    </div>
                 </div>
             </div>
 

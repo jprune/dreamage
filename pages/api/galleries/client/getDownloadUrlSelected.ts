@@ -12,15 +12,21 @@ export default async function getSDownloadUrl (req: NextApiRequest, res: NextApi
     if (session) {
         
         if(req.method === 'POST') {
-            const { userData } = req.body;
+            const { imageCollection }: { imageCollection: string[]} = req.body;
+            console.log('user data is', imageCollection);
+
+            const galleryImagesArr = await Promise.all(imageCollection.map(async (image) => {
+                const signedUrl = await Images.findOne({ imageUuid: image });
+                return signedUrl;
+            }));
 
             const mappedArray = await Promise.all(
-                userData.map(async (imageData) => {
-                    const url = await generateDownloadUrl(imageData.imageUuid);
-                    return {imageUuid: imageData.imageUuid, imageName: imageData.imageName, imageUrl: url};
+                galleryImagesArr.map(async (galleryImage) => {
+                    const url = await generateDownloadUrl(galleryImage.imageUuid);
+                    return {imageUuid: galleryImage.imageUuid, imageName: galleryImage.imageName, imageUrl: url};
                 })
             );
-            res.status(201).send({userData: mappedArray});
+            res.status(201).send({galleryImages: mappedArray});
         } else {
             res.status(500).send({message: 'HTTP method not valid. Only GET accepted'});
         }
