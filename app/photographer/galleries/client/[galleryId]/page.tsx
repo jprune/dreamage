@@ -4,8 +4,7 @@ import axios from 'axios';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiAddToQueue } from 'react-icons/bi';
-import { MdDeleteForever } from 'react-icons/md';
-import { AiOutlineCheckCircle } from 'react-icons/ai';
+import { MdDeleteForever, MdPreview } from 'react-icons/md';
 
 import { ClientGallery, Section } from '../../../../../types';
 import { RenderImage } from '../../../../../types';
@@ -42,6 +41,18 @@ const Page = (props: Props) => {
             router.push('/photographer/galleries');
         } catch (error) {
             console.log('Error deleting gallery', error);
+        }
+    };
+
+    const previewGallery = async () => {
+        try {
+            //call api with gallery id to create params id+32 string
+            const { data } = await axios.post('/api/galleries/client/saveHexId', { clientGalleryId });
+            //push router to id+32 string after return from api
+            router.push(`/photographer/galleries/client/preview/${clientGalleryId}&${data.previewId}`);
+            console.log('data', data);
+        } catch (error) {
+            console.log('Error previewing gallery', error);
         }
     };
 
@@ -113,6 +124,14 @@ const Page = (props: Props) => {
                     >
                         <BiAddToQueue className='' />
                         <span className=''>Add photos</span>
+                    </button>
+                    <button
+                        type='button' 
+                        className='mt-5 flex items-center justify-center gap-2 py-2 px-4 bg-purple-700 hover:bg-purple-900 text-white rounded-md text-2xl'
+                        onClick={() => previewGallery()}
+                    >
+                        <MdPreview className='' />
+                        <span className=''>Preview gallery</span>
                     </button>
                     <button 
                         type='button' 

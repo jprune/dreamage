@@ -4,7 +4,7 @@ const sectionSchema = new Schema({
     sectionTitle: {
         type: String,
     },
-    imageCollection: [String]
+    imageCollection: [String],
 });
 
 const clientGallerySchema = new Schema({
@@ -16,6 +16,7 @@ const clientGallerySchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true,
     },
+    previewId: String,
     sections: [sectionSchema],
 });
 
